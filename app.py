@@ -13,14 +13,16 @@ def send_email(name, phone, interest):
     msg['From'] = MY_EMAIL
     msg['To'] = MY_EMAIL
 
-    try:
-        # Render ke Environment Variable se password uthayega
-        # Yaad rakhein: Render dashboard par 'APP_PASSWORD' key hona chahiye
+   try:
         current_password = os.environ.get("ztgzmflzqfwegwqt") 
 
-        if not current_password:
-            print("Error: APP_PASSWORD environment variable nahi mila!")
-            return False
+        # 587 ki jagah 465 aur SMTP_SSL use karein
+        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+        # server.starttls()  <-- Is line ko hata dein ya comment kar dein
+        server.login(MY_EMAIL, current_password) 
+        server.sendmail(MY_EMAIL, MY_EMAIL, msg.as_string())
+        server.quit()
+        return True
 
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
