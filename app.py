@@ -4,7 +4,8 @@ import os
 from email.mime.text import MIMEText
 
 # --- CONFIGURATION ---
-MY_EMAIL = "25167005@kiit.ac.in"
+# Maine aapka personal email yahan set kar diya hai
+MY_EMAIL = "ar3097058@gmail.com"
 
 def send_email(name, phone, interest):
     msg = MIMEText(f"Naya Customer Inquiry!\n\nNaam: {name}\nPhone: {phone}\nInterest: {interest}")
@@ -13,8 +14,13 @@ def send_email(name, phone, interest):
     msg['To'] = MY_EMAIL
 
     try:
-        # Render ke Environment Variable se password uthana
-        current_password = os.environ.get("hieklioljhfizjmc") 
+        # Render ke Environment Variable se password uthayega
+        # Yaad rakhein: Render dashboard par 'APP_PASSWORD' key hona chahiye
+        current_password = os.environ.get("ztgzmflzqfwegwqt") 
+
+        if not current_password:
+            print("Error: APP_PASSWORD environment variable nahi mila!")
+            return False
 
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
@@ -23,10 +29,10 @@ def send_email(name, phone, interest):
         server.quit()
         return True
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"SMTP Error: {e}")
         return False
 
-# --- UI ---
+# --- UI (User Interface) ---
 st.set_page_config(page_title="Ajay Organization", page_icon="🏢")
 st.title("🏢 Ajay Organization")
 st.markdown("### Real Estate & Construction Materials")
@@ -51,7 +57,7 @@ with st.form("my_form"):
     phone = st.text_input("Mobile Number")
     choice = st.selectbox("I am interested in:", ["Land/Plot", "Construction Material", "Flat"])
     
-    # DHARAN RAKHEIN: Button sirf ek baar hona chahiye!
+    # Button sirf ek baar
     submit = st.form_submit_button("Book Now")
 
     if submit:
@@ -59,6 +65,6 @@ with st.form("my_form"):
             if send_email(name, phone, choice):
                 st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
             else:
-                st.error("Technical Error: Please check Render Environment Variables.")
+                st.error("Technical Error: Please check Render Environment Variables or App Password.")
         else:
             st.warning("Please fill all details.")
