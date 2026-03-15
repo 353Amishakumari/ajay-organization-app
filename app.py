@@ -1,10 +1,12 @@
 import streamlit as st
 import smtplib
+import os  # <-- Ye line add karein
 from email.mime.text import MIMEText
 
 # --- CONFIGURATION ---
-MY_EMAIL = "25167005@kiit.ac.in" 
-APP_PASSWORD = "hieklioljhfizjmc" # Spaces ke bina likhein
+MY_EMAIL = "25167005@kiit.ac.in"
+# Niche wali line ko dhyan se copy karein:
+APP_PASSWORD = os.getenv("hieklioljhfizjmc") # Spaces ke bina likhein
 
 def send_email(name, phone, interest):
     msg = MIMEText(f"Naya Customer Inquiry!\n\nNaam: {name}\nPhone: {phone}\nInterest: {interest}")
