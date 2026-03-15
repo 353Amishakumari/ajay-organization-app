@@ -13,8 +13,10 @@ def send_email(name, phone, interest):
     msg['To'] = MY_EMAIL
 
     try:
+        # Render ke Environment Variable se password load karna
         current_password = os.environ.get("ztgzmflzqfwegwqt") 
-        # Port 465 (SSL) sabse stable hai
+
+        # Port 465 aur SMTP_SSL connection ke liye sabse stable hai
         server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
         server.login(MY_EMAIL, current_password) 
         server.sendmail(MY_EMAIL, MY_EMAIL, msg.as_string())
@@ -24,13 +26,14 @@ def send_email(name, phone, interest):
         print(f"SMTP Error: {e}")
         return False
 
-# --- UI ---
+# --- UI (Website Design) ---
 st.set_page_config(page_title="Ajay Organization", page_icon="🏢")
 st.title("🏢 Ajay Organization")
 st.markdown("### Real Estate & Construction Materials")
 
 st.info("Quality materials aur best properties ke liye humse judein.")
 
+# Inventory Details
 col1, col2 = st.columns(2)
 with col1:
     st.subheader("📍 Properties")
@@ -41,19 +44,23 @@ with col2:
 
 st.divider()
 
+# Inquiry Form
 st.subheader("📩 Send Inquiry")
 with st.form("my_form", clear_on_submit=True):
     name = st.text_input("Full Name")
     phone = st.text_input("Mobile Number")
     choice = st.selectbox("I am interested in:", ["Land/Plot", "Construction Material", "Flat"])
     
+    # Button sirf EK baar
     submit = st.form_submit_button("Book Now")
 
     if submit:
+        # Check karein ki fields khaali toh nahi hain
         if name.strip() != "" and phone.strip() != "":
-            if send_email(name, phone, choice):
-                st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
-            else:
-                st.error("Technical error: Email nahi bheja ja saka.")
+            with st.spinner("Processing..."):
+                if send_email(name, phone, choice):
+                    st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
+                else:
+                    st.error("Technical error: Connection failed. Check App Password.")
         else:
             st.warning("Please fill all details.")
