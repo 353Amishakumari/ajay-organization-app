@@ -1,10 +1,9 @@
 import streamlit as st
-smtplib.SMTP_SSL
+import smtplib
 import os
 from email.mime.text import MIMEText
 
 # --- CONFIGURATION ---
-# Maine aapka personal email yahan set kar diya hai
 MY_EMAIL = "ar3097058@gmail.com"
 
 def send_email(name, phone, interest):
@@ -13,28 +12,22 @@ def send_email(name, phone, interest):
     msg['From'] = MY_EMAIL
     msg['To'] = MY_EMAIL
 
-   try:
+    try:
+        # Render Environment se password lena
         current_password = os.environ.get("ztgzmflzqfwegwqt") 
 
-        # 587 ki jagah 465 aur SMTP_SSL use karein
+        # Port 465 aur SMTP_SSL use kar rahe hain Network Error hatane ke liye
         server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-        # server.starttls()  <-- Is line ko hata dein ya comment kar dein
-        server.login(MY_EMAIL, current_password) 
-        server.sendmail(MY_EMAIL, MY_EMAIL, msg.as_string())
-        server.quit()
-        return True
-
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
         server.login(MY_EMAIL, current_password) 
         server.sendmail(MY_EMAIL, MY_EMAIL, msg.as_string())
         server.quit()
         return True
     except Exception as e:
-        print(f"SMTP Error: {e}")
+        # Ye error Render logs mein dikhega
+        st.error(f"Error detail: {e}")
         return False
 
-# --- UI (User Interface) ---
+# --- UI ---
 st.set_page_config(page_title="Ajay Organization", page_icon="🏢")
 st.title("🏢 Ajay Organization")
 st.markdown("### Real Estate & Construction Materials")
@@ -59,7 +52,6 @@ with st.form("my_form"):
     phone = st.text_input("Mobile Number")
     choice = st.selectbox("I am interested in:", ["Land/Plot", "Construction Material", "Flat"])
     
-    # Button sirf ek baar
     submit = st.form_submit_button("Book Now")
 
     if submit:
@@ -67,6 +59,6 @@ with st.form("my_form"):
             if send_email(name, phone, choice):
                 st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
             else:
-                st.error("Technical Error: Please check Render Environment Variables or App Password.")
+                st.error("Technical error: Network issue ya Password galat hai.")
         else:
             st.warning("Please fill all details.")
