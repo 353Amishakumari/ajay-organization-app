@@ -14,7 +14,6 @@ def send_email(name, phone, interest):
 
     try:
         # Render ke Environment Variable se password uthana
-        # Yaad rakhein: Render par variable ka naam 'APP_PASSWORD' hona chahiye
         current_password = os.environ.get("hieklioljhfizjmc") 
 
         server = smtplib.SMTP("smtp.gmail.com", 587)
@@ -38,7 +37,7 @@ st.info("Quality materials aur best properties ke liye humse judein.")
 col1, col2 = st.columns(2)
 with col1:
     st.subheader("📍 Properties")
-    st.write("✅ Plots in Bihar patna\n✅ 2/3 BHK Flats\n✅ Commercial Shops")
+    st.write("✅ Plots in Bhubaneswar\n✅ 2/3 BHK Flats\n✅ Commercial Shops")
 with col2:
     st.subheader("🏗️ Materials")
     st.write("✅ Premium Cement\n✅ TMT Steel Rods\n✅ High-quality Bricks")
@@ -52,7 +51,7 @@ with st.form("my_form"):
     phone = st.text_input("Mobile Number")
     choice = st.selectbox("I am interested in:", ["Land/Plot", "Construction Material", "Flat"])
     
-    # DHARAN RAKHEIN: Button sirf ek baar!
+    # DHARAN RAKHEIN: Button sirf ek baar hona chahiye!
     submit = st.form_submit_button("Book Now")
 
     if submit:
@@ -60,6 +59,6 @@ with st.form("my_form"):
             if send_email(name, phone, choice):
                 st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
             else:
-                st.error("Kuch technical error hai. Please check Render Environment Variables.")
+                st.error("Technical Error: Please check Render Environment Variables.")
         else:
             st.warning("Please fill all details.")
