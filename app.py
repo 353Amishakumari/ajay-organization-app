@@ -13,18 +13,18 @@ def send_email(name, phone, interest):
     msg['To'] = MY_EMAIL
 
     try:
-        # Render Environment se password lena
+        # Render Environment Variable se password load karna
         current_password = os.environ.get("ztgzmflzqfwegwqt") 
 
-        # Port 465 aur SMTP_SSL use kar rahe hain Network Error hatane ke liye
+        # Port 465 aur SMTP_SSL use kar rahe hain (Network unreachable error ke liye best hai)
         server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
         server.login(MY_EMAIL, current_password) 
         server.sendmail(MY_EMAIL, MY_EMAIL, msg.as_string())
         server.quit()
         return True
     except Exception as e:
-        # Ye error Render logs mein dikhega
-        st.error(f"Error detail: {e}")
+        # Logs mein error dekhne ke liye
+        print(f"SMTP Error: {e}")
         return False
 
 # --- UI ---
@@ -34,7 +34,7 @@ st.markdown("### Real Estate & Construction Materials")
 
 st.info("Quality materials aur best properties ke liye humse judein.")
 
-# Inventory Display
+# Inventory
 col1, col2 = st.columns(2)
 with col1:
     st.subheader("📍 Properties")
@@ -47,7 +47,7 @@ st.divider()
 
 # Inquiry Form
 st.subheader("📩 Send Inquiry")
-with st.form("my_form"):
+with st.form("my_form", clear_on_submit=True):
     name = st.text_input("Full Name")
     phone = st.text_input("Mobile Number")
     choice = st.selectbox("I am interested in:", ["Land/Plot", "Construction Material", "Flat"])
@@ -55,10 +55,12 @@ with st.form("my_form"):
     submit = st.form_submit_button("Book Now")
 
     if submit:
-        if name.strip() != "" and phone.strip() != "":
-            if send_email(name, phone, choice):
-                st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
-            else:
-                st.error("Technical error: Network issue ya Password galat hai.")
+        # strip() use kar rahe hain spaces hatane ke liye
+        if name.strip() and phone.strip():
+            with st.spinner("Bheja ja raha hai..."):
+                if send_email(name, phone, choice):
+                    st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
+                else:
+                    st.error("Technical error: Network issue. Ek baar naya App Password check karein.")
         else:
-            st.warning("Please fill all details.")
+            st.warning("Please fill all details.")ztg
