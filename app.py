@@ -1,5 +1,5 @@
 import streamlit as st
-import smtplib
+smtplib.SMTP_SSL
 import os
 from email.mime.text import MIMEText
 
