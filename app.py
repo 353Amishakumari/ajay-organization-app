@@ -13,14 +13,23 @@ def send_email(name, phone, interest):
     msg['Subject'] = f"New Lead: {name} (Ajay Organization)"
     msg['From'] = MY_EMAIL
     msg['To'] = MY_EMAIL
-    try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-            server.login(MY_EMAIL, APP_PASSWORD)
-            server.send_message(msg)
-        return True
-    except:
-        return False
 
+    try:
+        # --- YE WALI LINES DHAYAN SE EDIT KAREIN ---
+        # Render ke Environment Variable se password uthana
+        import os
+        current_password = os.environ.get("hieklioljhfizjmc") 
+
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        # Yahan humne direct password ki jagah variable use kiya hai
+        server.login(MY_EMAIL, current_password) 
+        server.sendmail(MY_EMAIL, MY_EMAIL, msg.as_string())
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Error: {e}") # Ye error Render Logs mein dikhega
+        return False
 # --- UI ---
 st.set_page_config(page_title="Ajay Organization", page_icon="🏢")
 st.title("🏢 Ajay Organization")
