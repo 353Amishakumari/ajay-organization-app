@@ -47,11 +47,18 @@ with st.form("my_form"):
     choice = st.selectbox("I am interested in:", ["Land/Plot", "Construction Material", "Flat"])
     submit = st.form_submit_button("Book Now")
     
+    submit = st.form_submit_button("Book Now")
+
     if submit:
-        if name and phone:
+        # Purana 'if name and phone:' hata kar ye likhein:
+        if name.strip() != "" and phone.strip() != "":
+            
+            # send_email function ko call karne se pehle password load karein
             if send_email(name, phone, choice):
                 st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
             else:
+                # Agar password galat hoga toh ye message aayega
                 st.error("Kuch technical error hai. Please check credentials.")
         else:
+            # Agar koi box khali hoga toh ye aayega
             st.warning("Please fill all details.")
