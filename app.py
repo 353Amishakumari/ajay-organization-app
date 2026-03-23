@@ -17,7 +17,8 @@ def send_email(name, phone, interest):
         current_password = os.environ.get("nnndurundxsxzdke") 
 
         # Port 465 aur SMTP_SSL connection ke liye sabse stable hai
-        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+server.starttls()
         server.login(MY_EMAIL, current_password) 
         server.sendmail(MY_EMAIL, MY_EMAIL, msg.as_string())
         server.quit()
