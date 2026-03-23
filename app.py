@@ -14,11 +14,12 @@ def send_email(name, phone, interest):
 
     try:
         # Render ke Environment Variable se password load karna
+        # Yahan "EMAIL_PASSWORD" wahi key honi chahiye jo Render Dashboard par hai
         current_password = os.environ.get("nnndurundxsxzdke") 
 
-        # Port 465 aur SMTP_SSL connection ke liye sabse stable hai
+        # Port 587 Render ke liye sabse best hai
         server = smtplib.SMTP('smtp.gmail.com', 587)
-server.starttls()
+        server.starttls() # Secure connection start karein
         server.login(MY_EMAIL, current_password) 
         server.sendmail(MY_EMAIL, MY_EMAIL, msg.as_string())
         server.quit()
@@ -47,21 +48,22 @@ st.divider()
 
 # Inquiry Form
 st.subheader("📩 Send Inquiry")
+# Form submit hone par "Processing" hamesha ke liye nahi rukega
 with st.form("my_form", clear_on_submit=True):
     name = st.text_input("Full Name")
     phone = st.text_input("Mobile Number")
     choice = st.selectbox("I am interested in:", ["Land/Plot", "Construction Material", "Flat"])
     
-    # Button sirf EK baar
     submit = st.form_submit_button("Book Now")
 
-    if submit:
-        # Check karein ki fields khaali toh nahi hain
-        if name.strip() != "" and phone.strip() != "":
-            with st.spinner("Processing..."):
-                if send_email(name, phone, choice):
-                    st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
-                else:
-                    st.error("Technical error: Connection failed. Check App Password.")
-        else:
-            st.warning("Please fill all details.")
+if submit:
+    if name.strip() != "" and phone.strip() != "":
+        # Spinner processing dikhayega, phir error ya success par ruk jayega
+        with st.spinner("Processing..."):
+            result = send_email(name, phone, choice)
+            if result:
+                st.success(f"Dhanyawad {name}! Ajay Organization aapko jald contact karegi.")
+            else:
+                st.error("Technical error: Connection failed. Check your App Password on Render.")
+    else:
+        st.warning("Please fill all details.")
