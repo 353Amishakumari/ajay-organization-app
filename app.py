@@ -14,12 +14,11 @@ def send_email(name, phone, interest):
 
     try:
         # Render ke Environment Variable se password load karna
-        # Yahan "EMAIL_PASSWORD" wahi key honi chahiye jo Render Dashboard par hai
         current_password = os.environ.get("nnndurundxsxzdke") 
 
-        # Port 587 Render ke liye sabse best hai
+        # Port 587 setup
         server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls() # Secure connection start karein
+        server.starttls() # <--- Ab yeh line sahi indented hai
         server.login(MY_EMAIL, current_password) 
         server.sendmail(MY_EMAIL, MY_EMAIL, msg.as_string())
         server.quit()
@@ -48,7 +47,6 @@ st.divider()
 
 # Inquiry Form
 st.subheader("📩 Send Inquiry")
-# Form submit hone par "Processing" hamesha ke liye nahi rukega
 with st.form("my_form", clear_on_submit=True):
     name = st.text_input("Full Name")
     phone = st.text_input("Mobile Number")
@@ -58,7 +56,6 @@ with st.form("my_form", clear_on_submit=True):
 
 if submit:
     if name.strip() != "" and phone.strip() != "":
-        # Spinner processing dikhayega, phir error ya success par ruk jayega
         with st.spinner("Processing..."):
             result = send_email(name, phone, choice)
             if result:
