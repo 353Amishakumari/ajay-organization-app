@@ -14,7 +14,7 @@ def send_email(name, phone, interest):
 
     try:
         # Render ke Environment Variable se password load karna
-        current_password = os.environ.get("ztgzmflzqfwegwqt") 
+        current_password = os.environ.get("nnndurundxsxzdke") 
 
         # Port 465 aur SMTP_SSL connection ke liye sabse stable hai
         server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
